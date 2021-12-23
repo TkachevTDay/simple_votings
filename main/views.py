@@ -7,6 +7,7 @@ def get_menu_context():
     return [
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
+        {'url_name': 'vote', 'name': 'Hard-coded Vote'},
     ]
 
 
@@ -27,3 +28,10 @@ def time_page(request):
         'menu': get_menu_context()
     }
     return render(request, 'pages/time.html', context)
+
+def vote_page(request):
+    context = {
+        'pagename':'Vote',
+
+    }
+    return render(request, 'pages/vote.html', context)
