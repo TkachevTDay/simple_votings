@@ -17,8 +17,12 @@
 
     </form>
 
-    {% if form.errors %}
-        {{ form.errors }}
-    {% endif %}
+    {% for key, value in form.errors.items %}
+      {% if key != '__all__' %}
+          {{ key }}
+      {% endif %}
+
+      {{ value }}
+    {% endfor %}
 
 {% endblock %}
