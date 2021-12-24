@@ -19,22 +19,21 @@ from django.urls import path
 from main import views
 from django.contrib.auth import views as auth_views
 
-from main.views import get_menu_context
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='index'),
     path('time/', views.time_page, name='time'),
+    path('votings/', views.votings, name='votings'),
     path(
         'login/',
         auth_views.LoginView.as_view(
             extra_context={
-                'menu': get_menu_context(),
+                'menu': views.get_menu_context(),
                 'pagename': 'Авторизация'
             }
         ),
         name='login'
     ),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('vote/', views.vote_page, name='vote')
+    path('vote', views.vote_page, name='vote')
 ]
