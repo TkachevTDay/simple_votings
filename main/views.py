@@ -3,6 +3,7 @@ import datetime
 from django.shortcuts import render
 from .models import Voting
 from .models import VoteVariant
+from .models import VoteFact
 from django.contrib.auth import get_user_model
 
 
@@ -10,8 +11,7 @@ def get_menu_context():
     return [
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
-        {'url_name': 'votings', 'name': 'Голосования'},
-        {'url_name': 'vote', 'name': 'Hard-coded Vote'},
+        {'url_name': 'votings', 'name': 'Голосования'}
     ]
 
 
@@ -46,17 +46,24 @@ def time_page(request):
 
 def vote_page(request):
     vote_id = request.GET.get("vote_id", None)
-
     if not vote_id:
         return render(request, 'pages/404.html')
+    try:
+        vote_content = Voting.objects.get(id = vote_id)
+    except:
+        return render(request, 'pages/404.html')
 
-    vote_content = Voting.objects.get(id = vote_id)
 
     vote_variants = []
     for i in VoteVariant.objects.filter(voting=vote_id):
-        vote_variants.append({"voting": i.voting,"description": i.description})
+        vote_variants.append({"id": i.id, "voting": i.voting,"description": i.description})
 
     users = get_user_model()
+    current_user = request.user
+
+    vote_facts = []
+    for i in VoteFact.objects.filter(user=current_user.id):
+        vote_facts.append(i.variant)
 
     context = {
         'pagename': 'Vote',
@@ -65,7 +72,7 @@ def vote_page(request):
         "vote_name": vote_content.name,
         "vote_description": vote_content.description,
         "vote_variants": vote_variants,
+        "vote_facts": vote_facts,
     }
     #todo add voting_variants (working)
-
     return render(request, 'pages/vote.html', context)
