@@ -35,5 +35,6 @@ urlpatterns = [
         name='login'
     ),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('vote/<int:vote_id>/', views.vote_page, name='vote')
+    path('vote/<int:vote_id>/', views.vote_page, name='vote'),
+    path('vote/add/', views.add_voting, name='vote_add')
 ]

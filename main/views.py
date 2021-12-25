@@ -1,6 +1,10 @@
 import datetime
 
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+
+from .forms import AddVotingForm
 from .models import Voting
 from .models import VoteVariant
 from .models import VoteFact
@@ -11,7 +15,8 @@ def get_menu_context():
     return [
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
-        {'url_name': 'votings', 'name': 'Голосования'}
+        {'url_name': 'votings', 'name': 'Голосования'},
+        {'url_name': 'vote_add', 'name': 'Создать'}
     ]
 
 
@@ -59,3 +64,23 @@ def vote_page(request, vote_id):
 
     # todo: make vote fact
     return render(request, 'pages/vote.html', context)
+
+@login_required
+def add_voting(request):
+    context = {
+        'menu': get_menu_context()
+    }
+    if request.method == 'GET':
+        context['form'] = AddVotingForm()
+    if request.method == 'POST':
+        context['form'] = AddVotingForm(request.POST)
+        if context['form'].is_valid():
+            record = Voting(
+                name=context['form'].cleaned_data['name'],
+                description=context['form'].cleaned_data['description'],
+                type=context['form'].cleaned_data['vote_type'],
+                author=request.user
+            )
+            record.save()
+            return redirect(reverse('vote', kwargs={'vote_id': record.id}))
+    return render(request, 'pages/add_voting.html', context)
