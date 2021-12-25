@@ -53,12 +53,12 @@ def vote_page(request, vote_id):
     vote_facts = VoteFact.objects.filter(user=current_user)
 
     context = {
-        'pagename': 'Vote',
+        'pagename': 'Vote page',
         'menu': get_menu_context(),
         'author': voting.author,
         "vote": voting,
         "vote_variants": vote_variants,
-        "vote_facts": vote_facts,
+        "vote_fact": vote_facts.first(),
     }
 
     # todo: make vote fact
