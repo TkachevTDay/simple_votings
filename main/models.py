@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -11,19 +12,25 @@ class UserSettings(models.Model):
     user = models.OneToOneField(to=get_user_model(), on_delete=models.CASCADE)
 
 
-class VoteFact(models.Model):
-    user = models.IntegerField()
-    variant = models.IntegerField()
-    created_at = models.DateTimeField()
+class Voting(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=2000)
+
+    """
+    0 - discrete
+    1 - 1:N
+    2 - M:N 
+    """
+    type = models.IntegerField(default=0)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE, default=1)
 
 
 class VoteVariant(models.Model):
-    voting = models.IntegerField()
-    description = models.CharField(max_length=60)
+    voting = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
+    description = models.CharField(max_length=600)
 
 
-class Voting(models.Model):
-    name = models.CharField(max_length=30)
-    description = models.CharField(max_length=60)
-    type = models.IntegerField()
-    author = models.IntegerField()
+class VoteFact(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    variant = models.ForeignKey(to=VoteVariant, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
