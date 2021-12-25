@@ -26,13 +26,9 @@ def index_page(request):
 
 
 def votings(request):
-    votings = []
-    users = get_user_model()
-    for i in Voting.objects.all():
-        votings.append({'author': users.objects.get(id=i.author), 'voting': i.name, 'id': i.id})
     context = {
         'menu': get_menu_context(),
-        'votings': votings,
+        'votings': Voting.objects.all(),
     }
     return render(request, 'pages/votings.html', context)
 
@@ -50,7 +46,7 @@ def vote_page(request, vote_id):
     voting = get_object_or_404(Voting, id=vote_id)
     vote_variants = VoteVariant.objects.filter(voting=vote_id)
     current_user = request.user
-    vote_facts = VoteFact.objects.filter(user=current_user)
+    vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
 
     context = {
         'pagename': 'Vote page',
