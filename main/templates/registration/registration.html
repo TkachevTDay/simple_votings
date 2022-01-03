@@ -1,12 +1,10 @@
-<head>
-<meta charset="UTF-8">
-<title>User Information Form</title>
-</head>
-<body>
-<form action="" method="POST">
-{% csrf_token %}
-{{ form.as_p }}
-<input type="Submit" name="submit" value="Submit"/>
-</form>
+{% extends 'base/base.html' %}
 
-</body>
+{% block content %}
+    <h1>Регистрация</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="Submit" name="submit" value="Submit"/>
+    </form>
+{% endblock %}

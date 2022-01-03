@@ -73,4 +73,11 @@ def register(request):
             form = UserForm()
     else:
         form = UserForm()
+
+    context = {
+        'pagename': 'Регистрация',
+        'menu': get_menu_context(),
+        'form': form
+    }
+
     return render(request, 'registration/registration.html', {'form': form})
