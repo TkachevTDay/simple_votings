@@ -63,7 +63,7 @@ def vote_page(request, vote_id):
 def register(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and not User.objects.filter(username=form.cleaned_data.get("username")).exists():
             user = User.objects.create_user(form.cleaned_data.get("username"),
                                             form.cleaned_data.get("email"),
                                             form.cleaned_data.get("password"))
