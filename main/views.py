@@ -1,17 +1,16 @@
 import datetime
 
 from django.shortcuts import render, get_object_or_404
-from .models import Voting
-from .models import VoteVariant
-from .models import VoteFact
+from .models import Voting, VoteFact, VoteVariant, User
 from django.contrib.auth import get_user_model
+from .forms import UserForm
 
 
 def get_menu_context():
     return [
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
-        {'url_name': 'votings', 'name': 'Голосования'}
+        {'url_name': 'votings', 'name': 'Голосования'},
     ]
 
 
@@ -59,3 +58,20 @@ def vote_page(request, vote_id):
 
     # todo: make vote fact
     return render(request, 'pages/vote.html', context)
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            item = User(username=form.cleaned_data.get("username"),
+                        first_name=form.cleaned_data.get("first_name"),
+                        last_name=form.cleaned_data.get("last_name"),
+                        email=form.cleaned_data.get("email"),
+                        password=form.cleaned_data.get("password"))
+            item.save()
+        else:
+            form = UserForm()
+    else:
+        form = UserForm()
+    return render(request, 'registration/registration.html', {'form': form})
