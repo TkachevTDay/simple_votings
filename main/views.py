@@ -61,6 +61,7 @@ def vote_page(request, vote_id):
 
 
 def register(request):
+    error_name_alredy_exsist = False
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid() and not User.objects.filter(username=form.cleaned_data.get("username")).exists():
@@ -69,7 +70,10 @@ def register(request):
                                             form.cleaned_data.get("password"))
             user.first_name, user.last_name = form.cleaned_data.get("first_name"), form.cleaned_data.get("last_name")
             user.save()
+            return render(request, 'registration/register_done.html', {'new_user': user})
         else:
+            if User.objects.filter(username=form.cleaned_data.get("username")).exists():
+                error_name_alredy_exsist = True
             form = UserForm()
     else:
         form = UserForm()
@@ -77,7 +81,8 @@ def register(request):
     context = {
         'pagename': 'Регистрация',
         'menu': get_menu_context(),
-        'form': form
+        'form': form,
+        'error_name_alredy_exsist': error_name_alredy_exsist
     }
 
-    return render(request, 'registration/registration.html', {'form': form})
+    return render(request, 'registration/register.html', context)
