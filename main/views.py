@@ -46,7 +46,9 @@ def vote_page(request, vote_id):
     voting = get_object_or_404(Voting, id=vote_id)
     vote_variants = VoteVariant.objects.filter(voting=vote_id)
     current_user = request.user
-    vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
+    vote_facts = []
+    if not current_user.is_anonymous:
+        vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
 
     context = {
         'pagename': 'Vote page',
@@ -54,7 +56,7 @@ def vote_page(request, vote_id):
         'author': voting.author,
         "vote": voting,
         "vote_variants": vote_variants,
-        "vote_fact": vote_facts.first(),
+        "vote_fact": vote_facts,
     }
 
     # todo: make vote fact
