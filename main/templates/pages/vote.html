@@ -15,6 +15,12 @@ Vote page
       <h5>Authored by: {{author}}</h5>
     </div>
     <hr>
+    {% if is_anonymous %}
+    <div class="text-secondary">
+      <h5>Незарегестрированные пользователи не могут голосовать</h5>
+    </div>
+    <hr>
+    {% endif %}
   </div>
 </div>
 
@@ -33,9 +39,12 @@ Vote page
           >
             <div class="card-body" align="left">
               <h5>{{variant.description}}</h5>
+
+              {% if not is_anonymous %}
               <button class="btn btn-light" type="submit" name="VOTE" value="{{ variant.id }}">
                 Проголосовать
               </button>
+              {% endif %}
             </div>
           </div>
         </div>
