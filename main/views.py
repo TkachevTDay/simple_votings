@@ -49,9 +49,9 @@ def vote_page(request, vote_id):
     vote_variants = VoteVariant.objects.filter(voting=vote_id)
     vote_facts_variants = []
     current_user = request.user
-
+    is_anonymous = current_user.is_anonymous
     if request.method == 'POST':
-        if not current_user.is_anonymous:
+        if not is_anonymous:
             vote = request.POST.get("VOTE")
             if (vote):
                 variant = VoteVariant.objects.get(id = vote)
@@ -65,7 +65,7 @@ def vote_page(request, vote_id):
                 else:
                     print("Голос уже засчитан")
 
-    if not current_user.is_anonymous:
+    if not is_anonymous:
         vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
         for i in vote_facts:
             vote_facts_variants.append(i.variant)
@@ -76,6 +76,7 @@ def vote_page(request, vote_id):
         "vote": voting,
         "vote_variants": vote_variants,
         "vote_fact": vote_facts_variants,
+        "is_anonymous": is_anonymous,
     }
 
     # todo: make vote fact
