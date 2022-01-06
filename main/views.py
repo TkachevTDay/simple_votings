@@ -11,6 +11,7 @@ def get_menu_context():
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
         {'url_name': 'votings', 'name': 'Голосования'},
+        {'url_name': 'registration', 'name': 'Регистрация'}
     ]
 
 
@@ -70,7 +71,7 @@ def register(request):
                                             form.cleaned_data.get("password"))
             user.first_name, user.last_name = form.cleaned_data.get("first_name"), form.cleaned_data.get("last_name")
             user.save()
-            return render(request, 'registration/register_done.html', {'new_user': user})
+            return render(request, 'registration/registration_done.html', {'new_user': user})
         else:
             if User.objects.filter(username=form.cleaned_data.get("username")).exists():
                 error_name_alredy_exsist = True
@@ -85,4 +86,4 @@ def register(request):
         'error_name_alredy_exsist': error_name_alredy_exsist
     }
 
-    return render(request, 'registration/register.html', context)
+    return render(request, 'registration/registration.html', context)
