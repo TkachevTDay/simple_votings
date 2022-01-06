@@ -5,17 +5,6 @@
 Votings
 {% endblock %}
 
-{% block extra_css %}
-<style>
-.shadow {
-  background: #0; /* Цвет фона */
-  box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
-  padding: 10px;
-}
-</style>
-{% endblock %}
-
-
 {% block content %}
 <div>
   <div align="center">
@@ -29,7 +18,7 @@ Votings
     {% for i in votings %}
       <div style="padding: 20px 0;">
         <div class="card h-100 text-center" style="width: 50rem;  border-radius: 0 25px; shadow: 20">
-          <div class="shadow" style="border-radius: 0 25px;">
+          <div class="shadow p-3 bg-body" style="border-radius: 0 25px;">
             <h6 class="card-header" style="border-radius: 10px;">Author: {{i.author}}</h6>
             <div class="card-body">
               <h5>{{i.name}}</h5>
