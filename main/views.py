@@ -47,8 +47,11 @@ def vote_page(request, vote_id):
     vote_variants = VoteVariant.objects.filter(voting=vote_id)
     current_user = request.user
     vote_facts = []
+    vote_facts_variants = []
     if not current_user.is_anonymous:
         vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
+        for i in vote_facts:
+            vote_facts_variants.append(i.variant)
 
     context = {
         'pagename': 'Vote page',
@@ -56,7 +59,7 @@ def vote_page(request, vote_id):
         'author': voting.author,
         "vote": voting,
         "vote_variants": vote_variants,
-        "vote_fact": vote_facts,
+        "vote_fact": vote_facts_variants,
     }
 
     # todo: make vote fact
