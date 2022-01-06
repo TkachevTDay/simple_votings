@@ -69,6 +69,21 @@ def vote_page(request, vote_id):
         vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
         for i in vote_facts:
             vote_facts_variants.append(i.variant)
+
+    allow_vote = True
+
+    if is_anonymous:
+        allow_vote = False
+    #todo: при закрытом голосовании также запрещать голосовать
+
+    types = [
+        "Выберите один из двух вариантов ответа",
+        "Выберите один из вариантов ответа",
+        "Выберите один или несколько вариантов ответа",
+    ]
+
+    str_type = types[voting.type]
+
     context = {
         'pagename': 'Vote page',
         'menu': get_menu_context(),
@@ -77,6 +92,8 @@ def vote_page(request, vote_id):
         "vote_variants": vote_variants,
         "vote_fact": vote_facts_variants,
         "is_anonymous": is_anonymous,
+        "allow_vote": allow_vote,
+        "str_type": str_type,
     }
 
     # todo: make vote fact
