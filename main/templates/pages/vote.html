@@ -2,7 +2,7 @@
 
 
 {% block title %}
-  Vote page
+Vote page
 {% endblock %}
 
 
@@ -20,23 +20,30 @@
 
 <div class="row">
   <div class="col text-center">
-    {% for variant in vote_variants %}
+
+    <form method="POST" action="">
+      {% csrf_token %}
+      {% for variant in vote_variants %}
       <div class="row mt-3">
         <div class="col-4 offset-4">
           <div
-              class="card h-100
-                {% if vote_fact.id == variant.id %} bg-success{% endif %}
+            class="card h-100
+                {% if variant in vote_fact %} bg-success{% endif %}
               "
-              >
+          >
             <div class="card-body" align="left">
               <h5>{{variant.description}}</h5>
+              <button class="btn btn-light" type="submit" name="VOTE" value="{{ variant.id }}">
+                Проголосовать
+              </button>
             </div>
           </div>
         </div>
       </div>
-    {% endfor %}
-    </div>
-
+      {% endfor %}
+    </form>
   </div>
+
+</div>
 </div>
 {% endblock %}
