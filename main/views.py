@@ -60,10 +60,6 @@ def vote_page(request, vote_id):
                 if(not isexist) or voting.type == 2:
                     if not VoteFact.objects.filter(user=current_user, variant = variant).exists():
                         VoteFact(user=current_user, variant=variant).save()
-                    else:
-                        print("Голос уже засчитан")
-                else:
-                    print("Голос уже засчитан")
 
     if not is_anonymous:
         vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
@@ -83,7 +79,6 @@ def vote_page(request, vote_id):
     ]
 
     str_type = types[voting.type]
-
     context = {
         'pagename': 'Vote page',
         'menu': get_menu_context(),
@@ -94,6 +89,7 @@ def vote_page(request, vote_id):
         "is_anonymous": is_anonymous,
         "allow_vote": allow_vote,
         "str_type": str_type,
+        "type": voting.type,
     }
 
     # todo: make vote fact

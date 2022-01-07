@@ -40,7 +40,34 @@ Vote page
   <div class="col text-center">
     <form method="POST" action="">
       {% csrf_token %}
+      {% if type == 0 %}
+      <div class="container">
+      <div class="row mt-2">
       {% for variant in vote_variants %}
+        <div class="col-6">
+          <div
+            class="card h-100
+                {% if variant in vote_fact %} bg-success{% endif %}
+              "
+          >
+            <div class="card-body">
+              <h5>{{variant.description}}</h5>
+
+              {% if allow_vote %}
+              <button class="btn btn-light" type="submit" name="VOTE" value="{{ variant.id }}">
+                Проголосовать
+              </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+      </div>
+      </div>
+      {% else %}
+      {% for variant in vote_variants %}
+
       <div class="row mt-3">
         <div class="col-4 offset-4">
           <div
@@ -61,6 +88,9 @@ Vote page
         </div>
       </div>
       {% endfor %}
+
+      {% endif %}
+
     </form>
   </div>
 </div>
