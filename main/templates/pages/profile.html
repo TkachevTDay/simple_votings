@@ -4,15 +4,49 @@
 {% block content %}
 
 <div align="center">
-    <div class="container">
-      <div class="row">
-        <div class="col-2 col-sm-2"></div>
-        <div class="col-2 col-sm-8">
+  <div class="container">
+    <div class="row">
 
-          <h2>{{author.name}}</h2>
-
+      <div class="col-6 col-sm-2"></div>
+      <div class="col-6 col-sm-8">
+        <div class="card mb-3" style="width: 25rem;  border-radius: 15px;">
+          <div class="card-body" align="left">
+            <h2>{{author.first_name}} {{author.last_name}}</h2>
+            <h4 class="fw-light">Username: {{author.username}}</h4>
+            {% if author.status %}
+            <h4 class="fw-light">Статус: {{author.status}}</h4>
+            {% endif %}
+          </div>
         </div>
       </div>
+      <div class="col-6 col-sm-2"></div>
     </div>
+
+    <div class="card mb-3" style="border-radius: 15px;">
+      <div class="card-body">
+        <h4>Ваши голосования</h4>
+        <hr>
+      </div>
+
+      {% if user_votings %}
+      <div class="row p-3">
+        {% for item in user_votings %}
+        <div class="col-6 col-sm-4 mb-3">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body">
+              <h4>{{item.name}}</h4>
+              <a href="/vote/{{item.id}}/" class="btn btn-primary">Перейти</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <h4 class="mb-3">Голосования отсутствуют</h4>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </div>
 </div>
 {% endblock %}

@@ -1,10 +1,7 @@
 import datetime
 
 from django.shortcuts import render, get_object_or_404
-from .models import Voting
-from .models import VoteVariant
-from .models import VoteFact
-from .models import User
+from .models import Voting, VoteFact, VoteVariant, User
 
 
 def get_menu_context():
@@ -61,12 +58,15 @@ def vote_page(request, vote_id):
     return render(request, 'pages/vote.html', context)
 
 def profile(request):
-    current_user = request.use
-    print(current_user.id)
+    current_user = request.user
     current_user = User.objects.get(id=current_user.id)
+
+    user_votings = Voting.objects.filter(author=current_user)
+
     context = {
         'pagename': 'Профиль',
         'menu': get_menu_context(),
         'author': current_user,
+        'user_votings': user_votings,
     }
     return render(request, 'pages/profile.html', context)
