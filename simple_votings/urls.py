@@ -24,6 +24,7 @@ urlpatterns = [
     path('', views.index_page, name='index'),
     path('time/', views.time_page, name='time'),
     path('votings/', views.votings, name='votings'),
+    path('profile/', views.profile, name='profile'),
     path(
         'login/',
         auth_views.LoginView.as_view(

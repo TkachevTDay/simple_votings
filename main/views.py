@@ -11,7 +11,7 @@ def get_menu_context():
     return [
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
-        {'url_name': 'votings', 'name': 'Голосования'}
+        {'url_name': 'votings', 'name': 'Голосования'},
     ]
 
 
@@ -59,3 +59,13 @@ def vote_page(request, vote_id):
 
     # todo: make vote fact
     return render(request, 'pages/vote.html', context)
+
+def profile(request):
+
+    current_user = request.user
+    context = {
+        'pagename': 'Профиль',
+        'menu': get_menu_context(),
+        'author': current_user,
+    }
+    return render(request, 'pages/profile.html', context)
