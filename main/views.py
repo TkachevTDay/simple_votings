@@ -104,8 +104,6 @@ def vote_page(request, vote_id):
         "vote_variants": vote_variants,
         "vote_fact": vote_facts_variants,
         "is_anonymous": is_anonymous,
-        "vote_fact": vote_facts_variants,
-        "is_anonymous": is_anonymous,
         "allow_vote": allow_vote,
         "str_type": str_type,
         "type": voting.type,
