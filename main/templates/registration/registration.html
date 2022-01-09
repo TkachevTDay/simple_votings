@@ -1,13 +1,81 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-    <h1>Create an account</h1>
-    <p>Please, sign up using the following form:</p>
+<div align="center">
+  <main>
 
-    <form action="" method="POST">
+    <div class="card h-100 text-center mb-5" style="width: 30rem; border-radius: 20px;" align="center">
+      <h1>Create an account</h1>
+      <p>Please, sign up using the following form:</p>
+      <form action="" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="Submit" value="Create my account"/>
-    </form>
 
+        <div class="form-floating mb-3 p-2">
+          <input
+            type="text"
+            name="username"
+            autofocus=""
+            maxlength="50"
+            id="1"
+            class="form-control"
+            placeholder="{{form.username.label}}">
+
+          <label class="p-4" for="1">{{form.username.label}}</label>
+        </div>
+
+        <div class="form-floating mb-3 p-2">
+          <input
+            type="text"
+            name="first_name"
+            maxlength="50"
+            id="2"
+            class="form-control"
+            placeholder="{{form.first_name.label}}">
+
+          <label class="p-4" for="2">{{form.first_name.label}}</label>
+        </div>
+
+        <div class="form-floating mb-3 p-2">
+          <input
+            type="text"
+            name="last_name"
+            maxlength="50"
+            id="3"
+            class="form-control"
+            placeholder="{{form.last_name.label}}">
+
+          <label class="p-4" for="3">{{form.last_name.label}}</label>
+        </div>
+
+        <div class="form-floating mb-3 p-2">
+          <input
+            type="text"
+            name="email"
+            maxlength="50"
+            id="4"
+            class="form-control"
+            placeholder="{{form.email.label}}">
+
+          <label class="p-4" for="4">{{form.email.label}}</label>
+        </div>
+
+        <div class="form-floating mb-3 p-2">
+          <input
+            type="text"
+            name="password"
+            maxlength="50"
+            id="5"
+            class="form-control"
+            placeholder="{{form.password.label}}">
+
+          <label class="p-4" for="5">{{form.password.label}}</label>
+        </div>
+
+        <button class="w-75 btn btn-lg btn-primary mb-2" type="submit" style="border-radius: 20px;">Create my account
+
+        </button>
+      </form>
+    </div>
+  </main>
+</div>
 {% endblock %}
