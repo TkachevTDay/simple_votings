@@ -12,12 +12,15 @@ from django.shortcuts import render, get_object_or_404
 from .models import Voting, VoteFact, VoteVariant, User
 from django.contrib.auth import get_user_model
 from .forms import UserForm
+from django.shortcuts import render, get_object_or_404
+from .models import Voting, VoteFact, VoteVariant, User
 
 
 def get_menu_context():
     return [
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
+        {'url_name': 'votings', 'name': 'Голосования'},
         {'url_name': 'votings', 'name': 'Голосования'},
         {'url_name': 'vote_add', 'name': 'Создать'},
         {'url_name': 'votings', 'name': 'Голосования'},
@@ -111,6 +114,20 @@ def vote_page(request, vote_id):
 
     # todo: make vote fact
     return render(request, 'pages/vote.html', context)
+
+def profile(request):
+    current_user = request.user
+    current_user = User.objects.get(id=current_user.id)
+
+    user_votings = Voting.objects.filter(author=current_user)
+
+    context = {
+        'pagename': 'Профиль',
+        'menu': get_menu_context(),
+        'author': current_user,
+        'user_votings': user_votings,
+    }
+    return render(request, 'pages/profile.html', context)
 
 
 def register(request):
