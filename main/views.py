@@ -8,7 +8,10 @@ from .forms import AddVotingForm
 from .models import Voting
 from .models import VoteVariant
 from .models import VoteFact
+from django.shortcuts import render, get_object_or_404
+from .models import Voting, VoteFact, VoteVariant, User
 from django.contrib.auth import get_user_model
+from .forms import UserForm
 
 
 def get_menu_context():
@@ -17,6 +20,8 @@ def get_menu_context():
         {'url_name': 'time', 'name': 'Текущее время'},
         {'url_name': 'votings', 'name': 'Голосования'},
         {'url_name': 'vote_add', 'name': 'Создать'}
+        {'url_name': 'votings', 'name': 'Голосования'},
+        {'url_name': 'registration', 'name': 'Регистрация'}
     ]
 
 
@@ -64,6 +69,34 @@ def vote_page(request, vote_id):
 
     # todo: make vote fact
     return render(request, 'pages/vote.html', context)
+
+
+def register(request):
+    error_name_alredy_exsist = False
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid() and not User.objects.filter(username=form.cleaned_data.get("username")).exists():
+            user = User.objects.create_user(form.cleaned_data.get("username"),
+                                            form.cleaned_data.get("email"),
+                                            form.cleaned_data.get("password"))
+            user.first_name, user.last_name = form.cleaned_data.get("first_name"), form.cleaned_data.get("last_name")
+            user.save()
+            return render(request, 'registration/registration_done.html', {'new_user': user})
+        else:
+            if User.objects.filter(username=form.cleaned_data.get("username")).exists():
+                error_name_alredy_exsist = True
+            form = UserForm()
+    else:
+        form = UserForm()
+
+    context = {
+        'pagename': 'Регистрация',
+        'menu': get_menu_context(),
+        'form': form,
+        'error_name_alredy_exsist': error_name_alredy_exsist
+    }
+
+    return render(request, 'registration/registration.html', context)
 
 @login_required
 def add_voting(request):
