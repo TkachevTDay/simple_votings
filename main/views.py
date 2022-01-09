@@ -21,9 +21,7 @@ def get_menu_context():
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
         {'url_name': 'votings', 'name': 'Голосования'},
-        {'url_name': 'votings', 'name': 'Голосования'},
         {'url_name': 'vote_add', 'name': 'Создать'},
-        {'url_name': 'votings', 'name': 'Голосования'},
         {'url_name': 'registration', 'name': 'Регистрация'}
     ]
 
