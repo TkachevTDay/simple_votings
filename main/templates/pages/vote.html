@@ -25,7 +25,7 @@
         <div class="col-4 offset-4">
           <div
               class="card h-100
-                {% if vote_fact.id == variant.id %} bg-success{% endif %}
+                {% if variant in vote_fact %} bg-success{% endif %}
               "
               >
             <div class="card-body" align="left">
