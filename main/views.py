@@ -89,8 +89,12 @@ def vote_page(request, vote_id):
     results = VoteFact.objects.filter(variant__voting=voting)
     len_results = len(results)
     result_percents = []
-    for i in vote_variants:
-        result_percents.append([i.description,int(len(VoteFact.objects.filter(variant=i)) / len_results * 100)]) # процент голосования с 1 знаком после запятой
+    if len_results != 0:
+        for i in vote_variants:
+            result_percents.append([i.description,int(len(VoteFact.objects.filter(variant=i)) / len_results * 100)]) # процент голосования с 1 знаком после запятой
+    else:
+        for i in vote_variants:
+            result_percents.append([i.description, 0])
 
     print(result_percents)
 
@@ -118,7 +122,7 @@ def vote_page(request, vote_id):
         "allow_vote": allow_vote,
         "str_type": str_type,
         "type": voting.type,
-        "vote_fact": vote_facts.first(),
+
         "view_result": view_result,
         "result_percents": result_percents,
     }
