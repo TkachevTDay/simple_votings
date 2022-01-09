@@ -1,28 +1,64 @@
 {% extends 'base/base.html' %}
 
-
 {% block content %}
-    <h1>Авторизация (vasya-promprog)</h1>
-    <hr>
 
-    <form action="{% url 'login' %}" method="POST">
+<div align="center">
+  <main>
+
+    <div class="card h-100 text-center mb-5" style="width: 20rem; border-radius: 20px;" align="center">
+      <form action="{% url 'login' %}" method="POST">
         {% csrf_token %}
+        <h1 class="h3 mb-3 mt-3 fw-normal">Please sign in</h1>
 
-        {% for item in form %}
-            <label>{{ item.label }}:</label><br>
-            {{ item }}
-        {% endfor %}
+        <div class="form-floating mb-3 p-2">
+          <input
+            type="text"
+            name="username"
+            autofocus=""
+            autocapitalize="none"
+            autocomplete="username"
+            maxlength="150"
+            required=""
+            id="floatingInput"
+            class="form-control"
+            placeholder="{{form.username.label}}">
 
-        <input type="submit" value="Войти">
+          <label class="p-4" for="floatingInput">{{form.username.label}}</label>
+        </div>
 
-    </form>
+        <div class="form-floating mb-3 p-2">
+          <input
+            name="password"
+            autocomplete="current-password"
+            required="" id="floatingPassword"
+            type="password"
+            class="form-control"
+            placeholder="{{form.password.label}}">
+
+          <label class="p-4" for="floatingPassword">{{form.password.label}}</label>
+        </div>
+
+        <button class="w-50 btn btn-lg btn-primary mb-2" type="submit" style="border-radius: 20px;">Sign in
+        </button>
+      </form>
+    </div>
+
 
     {% for key, value in form.errors.items %}
-      {% if key != '__all__' %}
-          {{ key }}
-      {% endif %}
+    {% if key != '__all__' %}
+    <div class="alert alert-danger" role="alert">
+    {{ key }}
+    </div>
+    {% endif %}
 
-      {{ value }}
+    <div class="alert alert-danger" role="alert">
+    {{ value }}
+    </div>
     {% endfor %}
+
+
+  </main>
+</div>
+
 
 {% endblock %}
