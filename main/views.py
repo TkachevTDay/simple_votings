@@ -85,6 +85,17 @@ def vote_page(request, vote_id):
 
     allow_vote = True
 
+    view_result = True
+    results = VoteFact.objects.filter(variant__voting=voting)
+    len_results = len(results)
+    result_percents = []
+    for i in vote_variants:
+        result_percents.append([i.description,int(len(VoteFact.objects.filter(variant=i)) / len_results * 100)]) # процент голосования с 1 знаком после запятой
+
+    print(result_percents)
+
+    #for i,j in zip([1,2,3],[4,5,6]):
+        #print(i,j)
     if is_anonymous:
         allow_vote = False
     #todo: при закрытом голосовании также запрещать голосовать
@@ -107,8 +118,10 @@ def vote_page(request, vote_id):
         "allow_vote": allow_vote,
         "str_type": str_type,
         "type": voting.type,
+        "vote_fact": vote_facts.first(),
+        "view_result": view_result,
+        "result_percents": result_percents,
     }
-
     # todo: make vote fact
     return render(request, 'pages/vote.html', context)
 
