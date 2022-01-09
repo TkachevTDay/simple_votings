@@ -61,7 +61,6 @@ def vote_page(request, vote_id):
     vote_facts_variants = []
     current_user = request.user
     vote_facts = []
-    vote_facts_variants = []
     is_anonymous = current_user.is_anonymous
     if not is_anonymous:
         vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
