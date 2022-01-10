@@ -62,11 +62,14 @@ def vote_page(request, vote_id):
     current_user = request.user
     vote_facts = []
     is_anonymous = current_user.is_anonymous
+
+
     if not is_anonymous:
         vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
         for i in vote_facts:
             vote_facts_variants.append(i.variant)
-    is_anonymous = current_user.is_anonymous
+
+
     if request.method == 'POST':
         if not is_anonymous:
             vote = request.POST.get("VOTE")
@@ -78,17 +81,13 @@ def vote_page(request, vote_id):
                     if not VoteFact.objects.filter(user=current_user, variant = variant).exists():
                         VoteFact(user=current_user, variant=variant).save()
 
-    if not is_anonymous:
-        vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
-        for i in vote_facts:
-            vote_facts_variants.append(i.variant)
-
     allow_vote = True
-
     view_result = True
     results = VoteFact.objects.filter(variant__voting=voting)
     len_results = len(results)
     result_percents = []
+
+
     if len_results != 0:
         for i in vote_variants:
             result_percents.append([i.description,int(len(VoteFact.objects.filter(variant=i)) / len_results * 100)]) # процент голосования с 1 знаком после запятой
