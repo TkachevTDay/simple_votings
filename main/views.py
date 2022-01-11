@@ -79,7 +79,9 @@ def vote_page(request, vote_id):
                 isexist = VoteFact.objects.filter(user=current_user, variant__voting=voting)# голосовал ли ранее
                 if(not isexist) or voting.type == 2:
                     if not VoteFact.objects.filter(user=current_user, variant = variant).exists():
-                        VoteFact(user=current_user, variant=variant).save()
+                        new_vote = VoteFact(user=current_user, variant=variant)
+                        new_vote.save()
+                        vote_facts_variants.append(new_vote.variant)
 
     allow_vote = True
     view_result = True
