@@ -39,6 +39,11 @@ Vote page
   <div class="row">
     <div class="col text-center">
       <form method="POST" action="">
+        <div align = "right">
+          <button class="btn btn-dark" type="submit" name="CLBTN" value="{{ vote.open }}">
+            Закрыть
+          </button>
+        </div>
         {% csrf_token %}
         {% if type == 0 %}
           <div class="container">

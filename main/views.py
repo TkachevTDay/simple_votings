@@ -73,9 +73,13 @@ def vote_page(request, vote_id):
     if request.method == 'POST':
         if not is_anonymous:
             vote = request.POST.get("VOTE")
+            btn = request.POST.get("CLBTN")
+            if btn:
+                voting.open = False
+                print("Закрыто")
+                voting.save()
             if (vote):
                 variant = VoteVariant.objects.get(id = vote)
-
                 isexist = VoteFact.objects.filter(user=current_user, variant__voting=voting)# голосовал ли ранее
                 if(not isexist) or voting.type == 2:
                     if not VoteFact.objects.filter(user=current_user, variant = variant).exists():
