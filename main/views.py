@@ -138,6 +138,7 @@ def vote_page(request, vote_id):
 
     allow_vote = True
     view_result = True
+    vote_opened = True
     results = VoteFact.objects.filter(variant__voting=voting)
     len_results = len(results)
     result_percents = []
@@ -176,7 +177,7 @@ def vote_page(request, vote_id):
         "allow_vote": allow_vote,
         "str_type": str_type,
         "type": voting.type,
-
+        "vote_opened": vote_opened,
         "view_result": view_result,
         "result_percents": result_percents,
     }

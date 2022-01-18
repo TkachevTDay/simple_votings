@@ -8,7 +8,7 @@
     <div class="card h-100 text-center mb-5" style="width: 20rem; border-radius: 20px;" align="center">
       <form action="{% url 'login' %}" method="POST">
         {% csrf_token %}
-        <h1 class="h3 mb-3 mt-3 fw-normal">Please sign in</h1>
+        <h1 class="h3 mb-3 mt-3 fw-normal">Введите логин и пароль</h1>
 
         <div class="form-floating mb-3 p-2">
           <input
@@ -38,7 +38,7 @@
           <label class="p-4" for="floatingPassword">{{form.password.label}}</label>
         </div>
 
-        <button class="w-50 btn btn-lg btn-primary mb-2" type="submit" style="border-radius: 20px;">Sign in
+        <button class="w-50 btn btn-lg btn-primary mb-2" type="submit" style="border-radius: 20px;">Войти
         </button>
       </form>
     </div>
