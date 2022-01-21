@@ -1,6 +1,8 @@
 import datetime
+import json
 
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
@@ -225,22 +227,61 @@ def register(request):
 
     return render(request, 'registration/registration.html', context)
 
+
 @login_required
-def add_voting(request):
+def add_voting(req):
     context = {
         'menu': get_menu_context()
     }
-    if request.method == 'GET':
-        context['form'] = AddVotingForm()
-    if request.method == 'POST':
-        context['form'] = AddVotingForm(request.POST)
-        if context['form'].is_valid():
-            record = Voting(
-                name=context['form'].cleaned_data['name'],
-                description=context['form'].cleaned_data['description'],
-                type=context['form'].cleaned_data['vote_type'],
-                author=request.user
+
+    if req.method == 'POST':
+        votingCreationData = json.loads(req.body.decode('utf-8'))
+
+        if "title" not in votingCreationData or votingCreationData["title"] == "":
+            return JsonResponse({'status': 'err', 'description': 'Укажите заголовок голосования!'})
+
+        if "description" not in votingCreationData or votingCreationData["description"] == "":
+            return JsonResponse({'status': 'err', 'description': 'Укажите описание голосования!'})
+
+        if "type" not in votingCreationData or votingCreationData["type"] == "":
+            return JsonResponse({'status': 'err', 'description': 'Укажите тип голосования!'})
+
+        if "vote_variants" not in votingCreationData or votingCreationData["vote_variants"] == "":
+            return JsonResponse({'status': 'err', 'description': 'Не указаны варианты голосования!'})
+
+        for variant in votingCreationData["vote_variants"]:
+            if variant == "":
+                return JsonResponse({'status': 'err', 'description': 'Не указаны все варианты голосования!'})
+
+        voteType = 0
+        if votingCreationData["type"] == "type_one_to_n":
+            voteType = 1
+        elif votingCreationData["type"] == "type_m_to_n":
+            voteType = 2
+
+        newVotingRecord = Voting(
+            name=votingCreationData["title"],
+            description=votingCreationData["description"],
+            type=voteType,
+            author=req.user
+        )
+        newVotingRecord.save()
+
+        voteVariants = votingCreationData["vote_variants"]
+
+        if len(voteVariants) < 2:
+            return JsonResponse({'status': 'err', 'description': 'В голосовании должно быть минимум 2 варианта!'})
+
+        if voteType == 0 and len(voteVariants) > 2:
+            voteVariants = voteVariants[:2]
+
+        for variant in voteVariants:
+            newVoteVariant = VoteVariant(
+                voting=newVotingRecord,
+                description=variant
             )
-            record.save()
-            return redirect(reverse('vote', kwargs={'vote_id': record.id}))
-    return render(request, 'pages/add_voting.html', context)
+            newVoteVariant.save()
+
+        return JsonResponse({'status': 'ok', 'description': 'Голосование успешно создано!', 'params': {'voting_id': newVotingRecord.id}})
+
+    return render(req, 'pages/vote_constructor.html', context)
