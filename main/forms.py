@@ -1,5 +1,9 @@
 from django import forms
 
+#from django.contrib.auth.models import User
+
+from .models import User
+
 
 class AddVotingForm(forms.Form):
     name = forms.CharField(
@@ -17,7 +21,6 @@ class AddVotingForm(forms.Form):
             (2, "M:N"),
         }
     )
-from django.contrib.auth.models import User
 
 
 class UserForm(forms.Form):

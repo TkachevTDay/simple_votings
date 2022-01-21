@@ -19,10 +19,10 @@ from .models import Voting, VoteFact, VoteVariant, User
 def get_menu_context():
     return [
         {'url_name': 'index', 'name': 'Главная'},
-        {'url_name': 'time', 'name': 'Текущее время'},
+        {'url_name': 'news', 'name': 'News'},
         {'url_name': 'votings', 'name': 'Голосования'},
         {'url_name': 'vote_add', 'name': 'Создать'},
-        {'url_name': 'registration', 'name': 'Регистрация'}
+        {'url_name': 'registration', 'name': 'Регистрация'},
     ]
 
 def new_update_message(le,header,body):
@@ -33,7 +33,8 @@ def new_update_message(le,header,body):
         "body": body,
     }
 
-def index_page(request):
+
+def news(request):
 
     last_updates = [
         [
@@ -85,6 +86,13 @@ def index_page(request):
     context = {
         'menu': get_menu_context(),
         'last_updates': last_updates,
+    }
+    return render(request, 'pages/news.html', context)
+
+
+def index_page(request):
+    context = {
+        'menu': get_menu_context(),
     }
     return render(request, 'pages/index.html', context)
 

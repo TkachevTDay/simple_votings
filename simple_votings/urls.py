@@ -25,6 +25,7 @@ urlpatterns = [
     path('time/', views.time_page, name='time'),
     path('votings/', views.votings, name='votings'),
     path('profile/', views.profile, name='profile'),
+    path('news/', views.news, name='news'),
     path(
         'login/',
         auth_views.LoginView.as_view(
@@ -39,5 +40,5 @@ urlpatterns = [
     path('vote/<int:vote_id>/', views.vote_page, name='vote'),
     path('vote/add/', views.add_voting, name='vote_add'),
     path('vote/<int:vote_id>/', views.vote_page, name='vote'),
-    path('registration/', views.register, name='registration')
+    path('registration/', views.register, name='registration'),
 ]

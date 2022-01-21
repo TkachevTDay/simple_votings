@@ -6,6 +6,7 @@
   <main>
 
     <div class="card h-100 text-center mb-5" style="width: 20rem; border-radius: 20px;" align="center">
+      <container class="mb-2 mt-2">
       <form action="{% url 'login' %}" method="POST">
         {% csrf_token %}
         <h1 class="h3 mb-3 mt-3 fw-normal">Please sign in</h1>
@@ -41,6 +42,7 @@
         <button class="w-50 btn btn-lg btn-primary mb-2" type="submit" style="border-radius: 20px;">Sign in
         </button>
       </form>
+      </container>
     </div>
 
 
