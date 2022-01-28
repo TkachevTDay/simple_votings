@@ -118,6 +118,9 @@ def vote_page(request, vote_id):
     allow_vote = is_open
     view_result = not is_open
 
+    if is_author:
+        view_result = True
+
     types = [
         "Выберите один из двух вариантов ответа",
         "Выберите один из вариантов ответа",

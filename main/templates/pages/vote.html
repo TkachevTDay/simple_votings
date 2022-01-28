@@ -36,7 +36,7 @@ Vote page
     </div>
   </div>
 
-  <div class="row">
+  <div class="row mb-3">
     <div class="col text-center">
       <form method="POST" action="">
         <div align = "right">
@@ -100,7 +100,11 @@ Vote page
   </div>
 
 
-  {% if view_result and result_percents %}
+  {% if view_result and result_percents  %}
+    {% if is_author  %}
+      <h5 align="center">Результаты открыты автору голосования</h5>
+    {% endif  %}
+
     <div class="row mt-3">
       <div class="col-4 offset-4">
         <div class="card mb-2" style="border-radius: 15px;">
