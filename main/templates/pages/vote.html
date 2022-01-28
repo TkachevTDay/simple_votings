@@ -40,9 +40,11 @@ Vote page
     <div class="col text-center">
       <form method="POST" action="">
         <div align = "right">
+          {% if is_author %}
           <button class="btn btn-dark" type="submit" name="CLBTN" value="{{ vote.open }}">
             Закрыть
           </button>
+          {% endif %}
         </div>
         {% csrf_token %}
         {% if type == 0 %}
