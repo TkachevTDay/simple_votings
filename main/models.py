@@ -21,7 +21,7 @@ class Voting(models.Model):
     1 - 1:N
     2 - M:N 
     """
-    open = models.BooleanField(default=1) #если закрыто - 0, иначе - 1
+    open = models.BooleanField(default=1)  # если закрыто - 0, иначе - 1
     type = models.IntegerField(default=0)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, default=1)
 

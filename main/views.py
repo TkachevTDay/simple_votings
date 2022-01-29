@@ -3,18 +3,9 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
+from django.shortcuts import render, get_object_or_404
 
-from .forms import AddVotingForm
-from .models import Voting
-from .models import VoteVariant
-from .models import VoteFact
-from django.shortcuts import render, get_object_or_404
-from .models import Voting, VoteFact, VoteVariant, User
-from django.contrib.auth import get_user_model
 from .forms import UserForm
-from django.shortcuts import render, get_object_or_404
 from .models import Voting, VoteFact, VoteVariant, User
 
 
@@ -27,24 +18,27 @@ def get_menu_context():
         {'url_name': 'registration', 'name': 'Регистрация'}
     ]
 
-def new_update_message(le,header,body):
-    return{
-        "heading": "heading"+str(le),
-        "collapse": "collapse"+str(le),
+
+def new_update_message(le, header, body):
+    return {
+        "heading": "heading" + str(le),
+        "collapse": "collapse" + str(le),
         "header": header,
         "body": body,
     }
 
-def index_page(request):
 
+def index_page(request):
     last_updates = [
         [
             "Голосования",
-            "Теперь можно выбирать какой-нибудь ответ. В зависимости от типа выборы: один из многих, несколько из многих и один из двух. + добавлена надпись о типе голосования"
+            "Теперь можно выбирать какой-нибудь ответ. В зависимости от типа выборы: один из многих, несколько из "
+            "многих и один из двух. + добавлена надпись о типе голосования "
         ],
         [
             "Дискретное голосование",
-            "Теперь дискретное голосование состоит из выбора из двух сторон. (Короче два варианта в горизонтальной плоскости, удобно будет фото добавить)"
+            "Теперь дискретное голосование состоит из выбора из двух сторон. (Короче два варианта в горизонтальной "
+            "плоскости, удобно будет фото добавить) "
         ],
         [
             "Регистрация",
@@ -64,11 +58,14 @@ def index_page(request):
         ],
         [
             "Профиль",
-            "Простой профиль с именем/фамилией пользователя, его ник и его существующие голосования с кнопкой создания нового (перекидывает на страницу создания)"
+            "Простой профиль с именем/фамилией пользователя, его ник и его существующие голосования с кнопкой "
+            "создания нового (перекидывает на страницу создания) "
         ],
         [
             "Устранение багов",
-            "Пофикшен баг при просмотре голосования анонимусом, теперь они могут только смотреть голосование (возможно в будущем и результат, если голование закрыто), но не голосовать + предупреждение о невозможности голосовать"
+            "Пофикшен баг при просмотре голосования анонимусом, теперь они могут только смотреть голосование ("
+            "возможно в будущем и результат, если голование закрыто), но не голосовать + предупреждение о "
+            "невозможности голосовать "
         ],
         [
             "Лента новостей на главной странице",
@@ -78,11 +75,10 @@ def index_page(request):
             "Визуальные изменения",
             "Логин и регистрация красиво захардкожены"
         ],
-    ] # Пишите сюда свои обновления
+    ]  # Пишите сюда свои обновления
 
     for i in range(len(last_updates)):
-        last_updates[i] = new_update_message(i,last_updates[i][0],last_updates[i][1])
-
+        last_updates[i] = new_update_message(i, last_updates[i][0], last_updates[i][1])
 
     context = {
         'menu': get_menu_context(),
@@ -109,7 +105,6 @@ def time_page(request):
     return render(request, 'pages/time.html', context)
 
 
-
 def vote_page(request, vote_id):
     voting = get_object_or_404(Voting, id=vote_id)
     vote_variants = VoteVariant.objects.filter(voting=vote_id)
@@ -130,7 +125,6 @@ def vote_page(request, vote_id):
         for i in vote_facts:
             vote_facts_variants.append(i.variant)
 
-
     if request.method == 'POST':
         if not is_anonymous:
             vote = request.POST.get("VOTE")
@@ -140,10 +134,10 @@ def vote_page(request, vote_id):
                 print("Закрыто")
                 voting.save()
             if (vote):
-                variant = VoteVariant.objects.get(id = vote)
-                isexist = VoteFact.objects.filter(user=current_user, variant__voting=voting)# голосовал ли ранее
-                if(not isexist) or voting.type == 2:
-                    if not VoteFact.objects.filter(user=current_user, variant = variant).exists():
+                variant = VoteVariant.objects.get(id=vote)
+                isexist = VoteFact.objects.filter(user=current_user, variant__voting=voting)  # голосовал ли ранее
+                if (not isexist) or voting.type == 2:
+                    if not VoteFact.objects.filter(user=current_user, variant=variant).exists():
                         new_vote = VoteFact(user=current_user, variant=variant)
                         new_vote.save()
                         vote_facts_variants.append(new_vote.variant)
@@ -152,10 +146,10 @@ def vote_page(request, vote_id):
     len_results = len(results)
     result_percents = []
 
-
     if len_results != 0:
         for i in vote_variants:
-            result_percents.append([i.description,int(len(VoteFact.objects.filter(variant=i)) / len_results * 100)]) # процент голосования с 1 знаком после запятой
+            result_percents.append([i.description, int(len(VoteFact.objects.filter(
+                variant=i)) / len_results * 100)])  # процент голосования с 1 знаком после запятой
     else:
         for i in vote_variants:
             result_percents.append([i.description, 0])
@@ -164,11 +158,10 @@ def vote_page(request, vote_id):
 
     is_open = voting.open
 
-    #for i,j in zip([1,2,3],[4,5,6]):
-        #print(i,j)
+    # for i,j in zip([1,2,3],[4,5,6]):
+    # print(i,j)
     if is_anonymous:
         allow_vote = False
-    #todo: при закрытом голосовании также запрещать голосовать
 
     allow_vote = is_open
     view_result = not is_open
@@ -200,6 +193,7 @@ def vote_page(request, vote_id):
     }
     # todo: make vote fact
     return render(request, 'pages/vote.html', context)
+
 
 def profile(request):
     current_user = request.user
@@ -298,6 +292,7 @@ def add_voting(req):
             )
             newVoteVariant.save()
 
-        return JsonResponse({'status': 'ok', 'description': 'Голосование успешно создано!', 'params': {'voting_id': newVotingRecord.id}})
+        return JsonResponse({'status': 'ok', 'description': 'Голосование успешно создано!',
+                             'params': {'voting_id': newVotingRecord.id}})
 
     return render(req, 'pages/vote_constructor.html', context)

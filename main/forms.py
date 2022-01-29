@@ -17,6 +17,8 @@ class AddVotingForm(forms.Form):
             (2, "M:N"),
         }
     )
+
+
 from django.contrib.auth.models import User
 
 
