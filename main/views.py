@@ -115,9 +115,15 @@ def vote_page(request, vote_id):
     vote_variants = VoteVariant.objects.filter(voting=vote_id)
     vote_facts_variants = []
     current_user = request.user
+    is_author = False
+    if current_user == voting.author:
+        is_author = True
+
     vote_facts = []
     is_anonymous = current_user.is_anonymous
 
+    allow_vote = True
+    view_result = True
 
     if not is_anonymous:
         vote_facts = VoteFact.objects.filter(user=current_user, variant__voting=voting)
@@ -128,9 +134,13 @@ def vote_page(request, vote_id):
     if request.method == 'POST':
         if not is_anonymous:
             vote = request.POST.get("VOTE")
+            btn = request.POST.get("CLBTN")
+            if btn:
+                voting.open = False
+                print("Закрыто")
+                voting.save()
             if (vote):
                 variant = VoteVariant.objects.get(id = vote)
-
                 isexist = VoteFact.objects.filter(user=current_user, variant__voting=voting)# голосовал ли ранее
                 if(not isexist) or voting.type == 2:
                     if not VoteFact.objects.filter(user=current_user, variant = variant).exists():
@@ -138,8 +148,6 @@ def vote_page(request, vote_id):
                         new_vote.save()
                         vote_facts_variants.append(new_vote.variant)
 
-    allow_vote = True
-    view_result = True
     results = VoteFact.objects.filter(variant__voting=voting)
     len_results = len(results)
     result_percents = []
@@ -154,11 +162,19 @@ def vote_page(request, vote_id):
 
     print(result_percents)
 
+    is_open = voting.open
+
     #for i,j in zip([1,2,3],[4,5,6]):
         #print(i,j)
     if is_anonymous:
         allow_vote = False
     #todo: при закрытом голосовании также запрещать голосовать
+
+    allow_vote = is_open
+    view_result = not is_open
+
+    if is_author:
+        view_result = True
 
     types = [
         "Выберите один из двух вариантов ответа",
@@ -178,7 +194,7 @@ def vote_page(request, vote_id):
         "allow_vote": allow_vote,
         "str_type": str_type,
         "type": voting.type,
-
+        "is_author": is_author,
         "view_result": view_result,
         "result_percents": result_percents,
     }
